@@ -61,6 +61,7 @@ def detect_object(frame, red):#480*640
                 reqy = j
             j += frame_size
         print min_std
+        time.sleep(1)
         i += frame_size
         
     cv2.rectangle(frame, (reqx,reqy), (reqx+frame_size,reqy+frame_size), (0,255,0), 2)
