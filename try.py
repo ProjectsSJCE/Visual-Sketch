@@ -7,6 +7,10 @@ from numpy import *
 from pylab import *
 import time
 import math
+
+#green = np.uint8([[[0,255,0 ]]])
+#hsv_green = cv2.cvtColor(green,cv2.COLOR_BGR2HSV)
+#take [H-10, 100,100] and [H+10, 255, 255]
 #import multiprocessing as mp
 
 FRAME_WIDTH = 200
@@ -57,6 +61,7 @@ def moveMouse(x, y):
 #    elapsed_time = (datetime.now() - BASE_TIME).seconds
 #    if elapsed_time > 0.5:
     INIT = True
+    mouse.move(x, y)
 #    mouse.press(x, y)
 #    BASE_TIME = elapsed_time
 #    mouse.release(x, y)            
@@ -68,29 +73,43 @@ def detect_object(frame, red):#480*640
     x_range = len(frame)
     y_range = len(frame[0])
     
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    #range
+    lower_blue = np.array([110,50,50])
+    upper_blue = np.array([130,255,255])
+
+    # Threshold to get only blue colors
+    mask = cv2.inRange(hsv, lower_blue, upper_blue)
+
+    white = np.zeros(shape=(frame_size, frame_size))
+    white += 255
+    
     min_std = 100000000000
     i = 0
-
+    temp = frame
+    frame = mask
     while i <= (y_range - frame_size):
         j = 0
         while j <= (x_range - frame_size):
             std = 0    
-            compare_frame = frame[i:i+frame_size, j:j+frame_size, :]
-            std = math.sqrt(sum(sum(sum(abs(compare_frame - red)))))
+            compare_frame = frame[i:i+frame_size, j:j+frame_size]
+            std = math.sqrt(sum(sum(sum(abs(compare_frame - white)))))
             if std < min_std:
                 min_std = std
                 reqx = i
                 reqy = j 
             j += frame_size
         i += frame_size
-        
+    
+    frame = temp
     cv2.rectangle(frame, (reqy,reqx), (reqy+frame_size,reqx+frame_size), (0,255,0), 2)
     cv2.imshow("Video", frame)
     key = cv2.waitKey(VIDEO_INTERVAL)
 #    if INIT is False:
 #        print "waiting now"
 #        time.sleep(15)
-    moveMouse((reqx + frame_size) / 2, (reqy + frame_size) / 2)
+    moveMouse((reqy + frame_size) / 2, (reqx + frame_size) / 2)
     
 def main():
         
