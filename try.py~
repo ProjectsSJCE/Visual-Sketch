@@ -48,8 +48,8 @@ def capture_frames():
         if key == ESC:
             break       
         elapsed_time = int(time.time() - BASE_TIME)
-        if elapsed_time >= 30:
-            break
+#        if elapsed_time >= 30:
+#            break
             
 def moveMouse(x, y):
 
@@ -58,16 +58,16 @@ def moveMouse(x, y):
     x = x * ((screen_width + 0.0) / FRAME_WIDTH)
     y = y * ((screen_height + 0.0) / FRAME_HEIGHT)
     
-    x = int(x)
-    y = int(y)    
+    x = round(x)
+    y = round(y)    
 #    x = x * 3
 #    y = y * 3
 #    elapsed_time = (datetime.now() - BASE_TIME).seconds
 #    if elapsed_time > 0.5:
     INIT = True
     mouse.move(x, y)
-    mouse.click(x,y)
-    mouse.press(x, y)
+#    mouse.click(x,y)
+#    mouse.press(x, y)
 #    BASE_TIME = elapsed_time
 #    mouse.release(x, y)            
 
@@ -113,7 +113,7 @@ def detect_object(frame, red):#480*640
     key = cv2.waitKey(VIDEO_INTERVAL)
     if INIT is False:
         print "waiting now"
-        time.sleep(15)
+        time.sleep(10)
     moveMouse((reqy + frame_size) / 2.0, (reqx + frame_size) / 2.0)
     
 def main():

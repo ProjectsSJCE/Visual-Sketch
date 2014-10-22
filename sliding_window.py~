@@ -97,7 +97,8 @@ def detect_object(frame, red):#480*640
     while i <= (y_range - frame_size):
         j = 0
         while j <= (x_range - frame_size):
-            std = 0    
+            std = 0
+            cv2.rectangle(frame, (reqy,reqx), (reqy+frame_size,reqx+frame_size), (0,255,0), 2)    
             compare_frame = frame[i:i+frame_size, j:j+frame_size]
             std = math.sqrt(sum(sum(sum(abs(compare_frame - white)))))
             if std < min_std:
@@ -113,7 +114,7 @@ def detect_object(frame, red):#480*640
     key = cv2.waitKey(VIDEO_INTERVAL)
     if INIT is False:
         print "waiting now"
-        time.sleep(5)
+        time.sleep(10)
     moveMouse((reqy + frame_size) / 2.0, (reqx + frame_size) / 2.0)
     
 def main():
